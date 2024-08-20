@@ -12,12 +12,28 @@
 
  - hosts: grp01
    become: yes
-   tasks:
+   pre_tasks:
      
    - name: install apache and php for Ubuntu servers
      apt:
        name:
          - apache2
          - libapache2-mod-php
+       state: latest
+     when: ansible_distribution == "Ubuntu"
+
+ - hosts: grp02
+   become: true
+   tasks: 
+  
+   - name: install mariadb (CentOS)
+     dnf:
+       name: mariadb
+       state: latest
+     when: ansible_distribution == "Centos"
+
+   - name: install mariadb (Ubuntu)
+     apt:
+       name: mariadb-server 
        state: latest
      when: ansible_distribution == "Ubuntu"
